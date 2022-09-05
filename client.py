@@ -1,4 +1,3 @@
-import imp
 import os
 import jstyleson as json
 from enum import Enum
