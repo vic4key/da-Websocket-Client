@@ -152,14 +152,15 @@ class WSClient:
 			on_error=self.ws_on_error,
 		)
 
-		ssl_context = None
+		ssl_opt = None
 		if use_ssl: # websocket secure
 			ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 			ssl_context.load_verify_locations(self.m_sslfile)
+			ssl_opt = {"context": ssl_context}
 
 		def run(*args):
 			try:
-				ws.run_forever(sslopt={"context": ssl_context})
+				ws.run_forever(sslopt=ssl_opt)
 			except Exception as e:
 				ws.close()
 				self.ws_stop_thread(ws)
