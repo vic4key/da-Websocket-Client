@@ -11,8 +11,7 @@ def normalize_path(path):
 	return path.replace("\\", "/").replace("/", os.path.sep)
 
 def hex_view(data):
-	if platform.system() == "Windows": return hexdump(data, "return")
-	else: return repr(hexdump(data))
+	return hexdump(data, "return")
 
 def get_default_font():
 	if platform.system() == "Windows": return QFont("Courier New", 9)
