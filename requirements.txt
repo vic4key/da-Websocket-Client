@@ -1,0 +1,6 @@
+PyInstaller
+hexdump
+jstyleson
+PyQt5
+simple_hexdump
+websocket_client
