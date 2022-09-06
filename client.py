@@ -5,6 +5,8 @@ from enum import Enum
 import websocket, ssl
 from websocket import ABNF
 
+from urllib.parse import urlparse
+
 from utils import *
 from thread import StoppableThread
 
@@ -34,8 +36,9 @@ class WSClient:
 	m_ws = None
 	m_ws_codes = {}
 	m_endpoint = ""
-	m_sslfile = ""
 	m_message = ""
+	m_sslfile = ""
+	m_autossl = True
 	m_debug = DEFAULT_DEBUG_TRACE
 	m_timeout = DEFAULT_TIME_OUT
 	m_custom_header = {}
@@ -71,6 +74,7 @@ class WSClient:
 					self.m_message = self.prefs_get("default_message")
 					self.m_ws_codes = self.prefs_get("websocket_codes", {})
 					self.m_custom_header = self.prefs_get("default_custom_header", {})
+					self.m_autossl = self.prefs_get("autossl", True)
 					self.m_sslfile = self.prefs_get("sslfile").strip()
 					self.m_sslfile = normalize_path(self.m_sslfile)
 		except:
@@ -80,6 +84,7 @@ class WSClient:
 	def prefs_save_to_file(self):
 		self.prefs_set("endpoint", self.m_endpoint)
 		self.prefs_set("timeout", self.m_timeout)
+		self.prefs_set("autossl", self.m_autossl)
 		self.prefs_set("sslfile", self.m_sslfile)
 		self.prefs_set("debug_trace", self.m_debug)
 		self.prefs_set("default_message", self.m_message)
@@ -143,6 +148,22 @@ class WSClient:
 
 		self.status("Connecting to server ...", color_t.warn)
 
+		ssl_opt = None
+		if use_ssl: # websocket secure
+			ca_chains = ""
+			try:
+				if self.m_autossl: # download cert chains from server
+					url = urlparse(self.m_endpoint)
+					ca_chains = get_cert_chains(url.hostname, url.port or 443)
+				elif os.path.exists(self.m_sslfile): # read from specified cert file
+					with open(self.m_sslfile, "r+") as f: ca_chains = f.read()
+				ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+				ssl_context.load_verify_locations(cadata=ca_chains)
+				ssl_opt = {"context": ssl_context}
+			except Exception as e:
+				self.status(str(e), color_t.error)
+				return
+
 		ws = websocket.WebSocketApp(
 			self.m_endpoint,
 			header=self.m_custom_header,
@@ -151,12 +172,6 @@ class WSClient:
 			on_data=self.ws_on_data,
 			on_error=self.ws_on_error,
 		)
-
-		ssl_opt = None
-		if use_ssl: # websocket secure
-			ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-			ssl_context.load_verify_locations(self.m_sslfile)
-			ssl_opt = {"context": ssl_context}
 
 		def run(*args):
 			try:

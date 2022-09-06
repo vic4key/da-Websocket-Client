@@ -77,7 +77,14 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_ssl" stretch="1,0">
+     <layout class="QHBoxLayout" name="horizontalLayout_ssl" stretch="0,1,0">
+      <item>
+       <widget class="QCheckBox" name="chk_auto_use_ssl_chains">
+        <property name="text">
+         <string>Automatically Use SSL Chains</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLineEdit" name="txt_ssl_file_path">
         <property name="minimumSize">
@@ -103,7 +110,7 @@
          </size>
         </property>
         <property name="text">
-         <string>SSL</string>
+         <string>SELECT SSL</string>
         </property>
        </widget>
       </item>

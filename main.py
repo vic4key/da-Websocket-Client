@@ -28,6 +28,7 @@ class Window(QMainWindow, WSClient):
 		self.txt_endpoint.textChanged.connect(self.on_changed_endpoint)
 		self.txt_timeout.textChanged.connect(self.on_changed_timeout)
 		self.btn_connect.clicked.connect(self.on_clicked_button_connect)
+		self.chk_auto_use_ssl_chains.clicked.connect(self.on_clicked_auto_use_ssl_chains)
 		self.btn_browse_ssl_file.clicked.connect(self.on_clicked_button_browse_ssl_file)
 		self.txt_message.textChanged.connect(self.on_changed_message)
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
@@ -53,23 +54,25 @@ class Window(QMainWindow, WSClient):
 		self.list_log.scrollToBottom()
 
 	def status(self, text, color=color_t.normal):
-		self.lbl_status.setText(text)
-		self.lbl_status.setToolTip(text)
 		palette = self.lbl_status.palette()
 		palette.setColor(QPalette.WindowText, QColor(color))
 		self.lbl_status.setPalette(palette)
+		self.lbl_status.setToolTip(text)
+		self.lbl_status.setText(text)
+		# self.lbl_status.repaint()
 
 	def update_ui(self, update_values=False):
 		if update_values:
 			self.txt_endpoint.setText(str(self.m_endpoint))
+			self.chk_auto_use_ssl_chains.setChecked(self.m_autossl)
 			self.txt_ssl_file_path.setText(os.path.basename(self.m_sslfile))
 			self.txt_ssl_file_path.setToolTip(self.m_sslfile)
 			self.txt_timeout.setText(str(self.m_timeout))
 			self.txt_message.setPlainText(self.m_message)
 		self.txt_endpoint.setEnabled(not self.ws_ready())
 		self.txt_timeout.setEnabled(not self.ws_ready())
-		self.txt_ssl_file_path.setEnabled(not self.ws_ready())
-		self.btn_browse_ssl_file.setEnabled(not self.ws_ready())
+		self.txt_ssl_file_path.setEnabled(not (self.m_autossl or self.ws_ready()))
+		self.btn_browse_ssl_file.setEnabled(not (self.m_autossl or self.ws_ready()))
 		self.txt_message.setEnabled(self.ws_ready())
 		self.btn_send_message.setEnabled(self.ws_ready())
 		self.btn_connect.setText("DISCONNECT" if self.ws_ready() else "CONNECT")
@@ -111,6 +114,10 @@ class Window(QMainWindow, WSClient):
 			self.ws_start(use_ssl)
 		else:
 			self.ws_close()
+
+	def on_clicked_auto_use_ssl_chains(self):
+		self.m_autossl = self.chk_auto_use_ssl_chains.isChecked()
+		self.update_ui()
 
 	def on_clicked_button_browse_ssl_file(self):
 		self.m_sslfile = Picker.select_file(self, self.is_default_style())

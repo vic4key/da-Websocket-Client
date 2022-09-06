@@ -2,6 +2,7 @@
     "endpoint": "wss://127.0.0.1:1609/echo",
     "timeout": 30,
     "sslfile": "preferences/local.pem",
+    "autossl": true,
     "debug_trace": false,
     "default_message": "hello from client",
     "default_custom_header": {
