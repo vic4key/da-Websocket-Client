@@ -71,6 +71,7 @@ class Window(QMainWindow, WSClient):
 			self.txt_message.setPlainText(self.m_message)
 		self.txt_endpoint.setEnabled(not self.ws_ready())
 		self.txt_timeout.setEnabled(not self.ws_ready())
+		self.chk_auto_use_ssl_chains.setEnabled(not self.ws_ready())
 		self.txt_ssl_file_path.setEnabled(not (self.m_autossl or self.ws_ready()))
 		self.btn_browse_ssl_file.setEnabled(not (self.m_autossl or self.ws_ready()))
 		self.txt_message.setEnabled(self.ws_ready())
