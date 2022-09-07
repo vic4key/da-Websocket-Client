@@ -1,6 +1,7 @@
 import os, sys, platform, socket, ssl, requests
 from OpenSSL import SSL, crypto
 from hexdump import hexdump
+from tempfile import TemporaryFile
 from PyQt5.QtGui import QFont
 
 def get_current_directory():
@@ -22,7 +23,17 @@ def get_default_font():
 	if platform.system() == "Windows": return QFont("Courier New", 9)
 	else: return QFont("Courier New", 10)
 
-def get_cert_chains(host, port=443):
+def store_as_temporary_file(content):
+	result = None
+	try:
+		f = TemporaryFile(delete=False)
+		f.write(content)
+		f.close()
+		result = f.name
+	except Exception as e: print(e)
+	return result
+
+def get_cert_chains_certificates(host, port=443):
 	result = None
 	s = None
 	try:
@@ -34,11 +45,11 @@ def get_cert_chains(host, port=443):
 		s.sendall(str.encode("HEAD / HTTP/1.0\n\n"))
 		certs = [crypto.dump_certificate(crypto.FILETYPE_PEM, cert)
 			for cert in s.get_peer_cert_chain()]
-		result = b"".join(certs).decode("utf-8")
+		result = b"".join(certs)
 		s.shutdown()
 	except Exception as e: print(e)
 	if not s is None: s.close()
-	return result
+	return store_as_temporary_file(result)
 
 def get_default_ca_trust_root_certificates():
 	cacert_path = os.path.join(get_current_directory(), "preferences", "cacert.pem")

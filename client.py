@@ -152,10 +152,23 @@ class WSClient:
 		if use_ssl: # websocket secure
 			sslfile = ""
 			try:
-				if self.m_autossl: # get from default ca trusted root certificates
-					sslfile = get_default_ca_trust_root_certificates()
+				# generate certificate for ssl connection
+				if self.m_autossl:
+					# get signed certificate from default ca trusted root certificates
+					ssl_default_ca_file = get_default_ca_trust_root_certificates()
+					# get self-signed certificate chain from server
+					url = urlparse(self.m_endpoint)
+					ssl_self_signed_file = get_cert_chains_certificates(url.hostname, url.port or 443)
+					# combine them all into one
+					content = ""
+					with open(ssl_default_ca_file, "r") as f: content += f.read()
+					content += "\n"
+					with open(ssl_self_signed_file, "r") as f: content += f.read()
+					# save to a single file in temporary folder
+					sslfile = store_as_temporary_file(content.encode())
 				elif os.path.exists(self.m_sslfile): # get from specified cert file
 					sslfile = self.m_sslfile
+				# create ssl context
 				ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 				ssl_context.load_verify_locations(sslfile)
 				ssl_opt = {"context": ssl_context}
