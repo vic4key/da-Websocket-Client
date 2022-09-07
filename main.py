@@ -59,7 +59,7 @@ class Window(QMainWindow, WSClient):
 		self.lbl_status.setPalette(palette)
 		self.lbl_status.setToolTip(text)
 		self.lbl_status.setText(text)
-		# self.lbl_status.repaint()
+		self.lbl_status.repaint()
 
 	def update_ui(self, update_values=False):
 		if update_values:
@@ -109,9 +109,11 @@ class Window(QMainWindow, WSClient):
 	def on_clicked_button_connect(self):
 		if not self.ws_ready():
 			use_ssl = self.m_endpoint.startswith("wss:")
-			if use_ssl and not os.path.exists(self.m_sslfile):
-				self.status("This end-point required SSL file", color_t.error)
-				return
+			if use_ssl:
+				if not self.m_autossl:
+					if not os.path.exists(self.m_sslfile):
+						self.status("This end-point required SSL file", color_t.error)
+						return
 			self.ws_start(use_ssl)
 		else:
 			self.ws_close()

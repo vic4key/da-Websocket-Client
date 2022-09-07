@@ -146,23 +146,24 @@ class WSClient:
 		websocket.enableTrace(self.m_debug)
 		websocket.setdefaulttimeout(self.m_timeout)
 
-		self.status("Connecting to server ...", color_t.warn)
+		if use_ssl: self.status("Initializing SSL connection ...", color_t.warn)
 
 		ssl_opt = None
 		if use_ssl: # websocket secure
-			ca_chains = ""
+			sslfile = ""
 			try:
-				if self.m_autossl: # download cert chains from server
-					url = urlparse(self.m_endpoint)
-					ca_chains = get_cert_chains(url.hostname, url.port or 443)
-				elif os.path.exists(self.m_sslfile): # read from specified cert file
-					with open(self.m_sslfile, "r+") as f: ca_chains = f.read()
+				if self.m_autossl: # get from default ca trusted root certificates
+					sslfile = get_default_ca_trust_root_certificates()
+				elif os.path.exists(self.m_sslfile): # get from specified cert file
+					sslfile = self.m_sslfile
 				ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-				ssl_context.load_verify_locations(cadata=ca_chains)
+				ssl_context.load_verify_locations(sslfile)
 				ssl_opt = {"context": ssl_context}
 			except Exception as e:
 				self.status(str(e), color_t.error)
 				return
+
+		self.status("Connecting to server ...", color_t.warn)
 
 		ws = websocket.WebSocketApp(
 			self.m_endpoint,

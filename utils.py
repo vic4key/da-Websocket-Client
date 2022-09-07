@@ -1,16 +1,16 @@
-import certifi
-import ssl
-import socket
-from OpenSSL import SSL
-import os, sys, platform, socket
+import os, sys, platform, socket, ssl, requests
 from OpenSSL import SSL, crypto
 from hexdump import hexdump
 from PyQt5.QtGui import QFont
 
+def get_current_directory():
+	result = ""
+	try: result = sys._MEIPASS
+	except: result = os.path.abspath(".")
+	return result
+
 def resources(file):
-	try: cdir = sys._MEIPASS
-	except: cdir = os.path.abspath(".")
-	return os.path.join(cdir, os.path.join("resources", file))
+	return os.path.join(get_current_directory(), os.path.join("resources", file))
 
 def normalize_path(path):
 	return path.replace("\\", "/").replace("/", os.path.sep)
@@ -39,3 +39,19 @@ def get_cert_chains(host, port=443):
 	except Exception as e: print(e)
 	if not s is None: s.close()
 	return result
+
+def get_default_ca_trust_root_certificates():
+	cacert_path = os.path.join(get_current_directory(), "preferences", "cacert.pem")
+	try:
+		# read from exists ca-cert file
+		if os.path.exists(cacert_path):
+			with open(cacert_path, "r+") as f:
+				if f.read().strip() != "":
+					return cacert_path
+		# CA certificates extracted from Mozilla
+		response = requests.get("https://curl.se/ca/cacert.pem")
+		if response.status_code == 200:
+			with open(cacert_path, "w+", encoding="utf-8") as f: # store for using later
+				f.write(response.text)
+	except Exception as e: print(e)
+	return cacert_path
