@@ -1,7 +1,8 @@
 import os, sys, platform, socket, ssl, requests
 from OpenSSL import SSL, crypto
 from hexdump import hexdump
-from tempfile import TemporaryFile
+from datetime import datetime
+from tempfile import TemporaryFile, gettempdir
 from PyQt5.QtGui import QFont
 
 def get_current_directory():
@@ -26,7 +27,10 @@ def get_default_font():
 def store_as_temporary_file(content):
 	result = None
 	try:
-		f = TemporaryFile(delete=False)
+		t = datetime.now()
+		tmp_file_name = t.strftime("%Y%m%d_%H%M%S") + f"_{t.microsecond}"
+		tmp_file_path = os.path.join(gettempdir(), tmp_file_name)
+		f = open(tmp_file_path, "wb") # TemporaryFile()
 		f.write(content)
 		f.close()
 		result = f.name
@@ -49,7 +53,7 @@ def get_cert_chains_certificates(host, port=443):
 		s.shutdown()
 	except Exception as e: print(e)
 	if not s is None: s.close()
-	return store_as_temporary_file(result)
+	return "" if result is None else store_as_temporary_file(result)
 
 def get_default_ca_trust_root_certificates():
 	cacert_path = os.path.join(get_current_directory(), "preferences", "cacert.pem")

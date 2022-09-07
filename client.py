@@ -155,17 +155,16 @@ class WSClient:
 				# generate certificate for ssl connection
 				if self.m_autossl:
 					# get signed certificate from default ca trusted root certificates
-					ssl_default_ca_file = get_default_ca_trust_root_certificates()
+					sslfile = ssl_default_ca_file = get_default_ca_trust_root_certificates()
 					# get self-signed certificate chain from server
 					url = urlparse(self.m_endpoint)
 					ssl_self_signed_file = get_cert_chains_certificates(url.hostname, url.port or 443)
-					# combine them all into one
-					content = ""
-					with open(ssl_default_ca_file, "r") as f: content += f.read()
-					content += "\n"
-					with open(ssl_self_signed_file, "r") as f: content += f.read()
-					# save to a single file in temporary folder
-					sslfile = store_as_temporary_file(content.encode())
+					# combine them all into one and save to a single file in temporary folder
+					if os.path.exists(ssl_default_ca_file) and os.path.exists(ssl_self_signed_file):
+						content = ""
+						with open(ssl_default_ca_file, "r") as f:  content += f.read() + "\n"
+						with open(ssl_self_signed_file, "r") as f: content += f.read() + "\n"
+						sslfile = store_as_temporary_file(content.encode())
 				elif os.path.exists(self.m_sslfile): # get from specified cert file
 					sslfile = self.m_sslfile
 				# create ssl context
