@@ -5,6 +5,8 @@ I googled to find WS Client that support both WS/WSS with specified certificate 
 ## Features
 
 * Support both `Websocket (WS)` & `Websocket Secure (WSS)` protocol
+* Support to use a specified certification file manually
+* Support to use `self-signed` & `publicly-trusted-signed` certification automatically
 * Support send/receive/display `Text` & `Binary` data type
 * Support custom websocket header
 * Support save/load preferences from JSON file
@@ -24,7 +26,7 @@ I googled to find WS Client that support both WS/WSS with specified certificate 
 
 ## Screenshots
 
-![](screenshots/app.png)
+![](screenshots/app.png?)
 
 ## Contact
 
