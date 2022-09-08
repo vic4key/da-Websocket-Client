@@ -93,16 +93,16 @@ class WSClient:
 		with open(PREFS_FILE_NAME, "w+") as f:
 			f.write(json.dumps(self.m_prefs, indent=4))
 
-	def spotcheck_params(self):
-		return self.m_timeout > 0 and self.m_endpoint.startswith(("ws:", "wss:"))
-
-	def ws_remember_to_delete_temp_file(self, temp_file):
+	def remember_to_delete_temp_file(self, temp_file):
 		self.m_ws_temp_files.append(temp_file)
 
-	def ws_stop_thread(self, ws):
+	def stop_thread(self, ws):
 		if ws in self.m_ws_threads.keys():
 			self.m_ws_threads[ws].stop()
 			del self.m_ws_threads[ws]
+
+	def ws_spotcheck_params(self):
+		return self.m_timeout > 0 and self.m_endpoint.startswith(("ws:", "wss:"))
 
 	def ws_on_open(self, ws):
 		self.m_ws = ws
@@ -122,7 +122,7 @@ class WSClient:
 			text = f"Close code {close_status_code}" if msg is None else msg
 			color = color_t.error
 		if self.ws_ready(): self.status(text, color)
-		self.ws_stop_thread(ws)
+		self.stop_thread(ws)
 		self.m_ws = None
 		self.update_ui()
 
@@ -163,14 +163,14 @@ class WSClient:
 					# get self-signed certificate chain from server
 					url = urlparse(self.m_endpoint)
 					ssl_self_signed_file = get_cert_chains_certificates(url.hostname, url.port or 443)
-					self.ws_remember_to_delete_temp_file(ssl_self_signed_file)
+					self.remember_to_delete_temp_file(ssl_self_signed_file)
 					# combine them all into one and save to a single file in temporary folder
 					if os.path.exists(ssl_default_ca_file) and os.path.exists(ssl_self_signed_file):
 						content = ""
 						with open(ssl_default_ca_file, "r") as f:  content += f.read() + "\n"
 						with open(ssl_self_signed_file, "r") as f: content += f.read() + "\n"
 						sslfile = store_as_temporary_file(content.encode())
-						self.ws_remember_to_delete_temp_file(sslfile)
+						self.remember_to_delete_temp_file(sslfile)
 				elif os.path.exists(self.m_sslfile): # get from specified cert file
 					sslfile = self.m_sslfile
 				# create ssl context
@@ -197,7 +197,7 @@ class WSClient:
 				ws.run_forever(sslopt=ssl_opt)
 			except Exception as e:
 				ws.close()
-				self.ws_stop_thread(ws)
+				self.stop_thread(ws)
 
 		self.m_ws_threads[ws] = StoppableThread(target=run)
 		self.m_ws_threads[ws].start()
@@ -206,14 +206,14 @@ class WSClient:
 		if self.ws_ready():
 			self.status("Closing connection ...", color_t.warn)
 			self.m_ws.close()
-			self.ws_stop_thread(self.m_ws)
+			self.stop_thread(self.m_ws)
 		self.status("Closed")
 
 	def	ws_cleanup(self):
 		self.ws_close()
 		for ws in self.m_ws_threads.keys():
 			ws.close()
-			self.ws_stop_thread(ws)
+			self.stop_thread(ws)
 		for e in self.m_ws_temp_files:
 			if os.path.exists(e):
 				os.unlink(e)

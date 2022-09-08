@@ -101,14 +101,14 @@ class Window(QMainWindow, WSClient):
 
 	def on_changed_endpoint(self):
 		self.m_endpoint = self.txt_endpoint.text().strip()
-		self.btn_connect.setEnabled(self.spotcheck_params())
+		self.btn_connect.setEnabled(self.ws_spotcheck_params())
 
 	def on_changed_timeout(self):
 		timeout = self.txt_timeout.text().strip()
 		if not timeout.isdecimal():
 			timeout = str(0)
 		self.m_timeout = int(timeout)
-		self.btn_connect.setEnabled(self.spotcheck_params())
+		self.btn_connect.setEnabled(self.ws_spotcheck_params())
 
 	def on_changed_message(self):
 		self.m_message = self.txt_message.toPlainText()
