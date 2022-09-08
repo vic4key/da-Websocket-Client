@@ -1,8 +1,8 @@
-import os, sys, platform, socket, ssl, requests
+import os, sys, platform, socket, requests
 from OpenSSL import SSL, crypto
 from hexdump import hexdump
 from datetime import datetime
-from tempfile import TemporaryFile, gettempdir
+from tempfile import gettempdir
 from PyQt5.QtGui import QFont
 
 def get_current_directory():
