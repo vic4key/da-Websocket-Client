@@ -26,7 +26,7 @@ I googled to find WS Client that support both WS/WSS with specified certificate 
 
 ## Screenshots
 
-![](screenshots/app.png?)
+![](screenshots/app.png?rev=1)
 
 ## Contact
 
