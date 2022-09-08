@@ -153,7 +153,7 @@ class Window(QMainWindow, WSClient):
 			except Exception as e:
 				QMessageBox.critical(self, "Error", str(e))
 				return
-		self.log(message, color_t.success, icon_t.up)
+		self.log(message, color_t.orange, icon_t.up)
 
 	def on_clicked_button_clear_list_log(self):
 		self.list_log.clear()

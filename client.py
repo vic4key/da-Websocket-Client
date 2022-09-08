@@ -27,7 +27,7 @@ class color_t(str, Enum):
 	error = "red"
 	# color
 	red = "red"
-	green = "green"
+	orange = "orange"
 
 class data_t(int, Enum):
 	text = 0
