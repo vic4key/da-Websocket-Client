@@ -5,6 +5,16 @@ os.environ["PATH"] += os.pathsep.join([os.getcwd()])
 
 from PyQt5.QtWidgets import QApplication
 
+# auto compile resources .qrc
+import pyqt5ac
+pyqt5ac.main(
+	initPackage=False,
+	force=False,
+	ioPaths=[
+	["resources/resources.qrc", "resources.py"]
+])
+import resources
+
 from main import Window
 
 # pip install QDarkStyle

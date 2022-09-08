@@ -1,5 +1,7 @@
 PyInstaller
 jstyleson
 PyQt5
+pyqt5ac
+requests
 websocket_client
 https://files.pythonhosted.org/packages/55/b3/279b1d57fa3681725d0db8820405cdcb4e62a9239c205e4ceac4391c78e4/hexdump-3.3.zip
