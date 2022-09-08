@@ -14,6 +14,11 @@ DEFAULT_TIME_OUT = 30
 DEFAULT_DEBUG_TRACE = False
 PREFS_FILE_NAME = normalize_path("preferences/prefs.json")
 
+class icon_t(str, Enum):
+	none = ""
+	down = ":/icons/arrow-down.png"
+	up   = ":/icons/arrow-up.png"
+
 class color_t(str, Enum):
 	# status
 	success = "green"
@@ -52,7 +57,7 @@ class WSClient:
 	def update_ui(self, update_values=False):
 		assert False, "missing implementation"
 
-	def log(self, text, color=color_t.normal):
+	def log(self, text, color=color_t.normal, icon=icon_t.none):
 		assert False, "missing implementation"
 
 	def status(self, text, color=color_t.normal):
@@ -134,9 +139,9 @@ class WSClient:
 
 	def ws_on_data(self, ws, data, type, continuous):
 		if type == ABNF.OPCODE_TEXT:
-			self.log(data, color_t.red)
+			self.log(data, color_t.red, icon_t.down)
 		elif type == ABNF.OPCODE_BINARY:
-			self.log(hex_view(data), color_t.red)
+			self.log(hex_view(data), color_t.red, icon_t.down)
 		else:
 			print("received data type did not support", ABNF.OPCODE_MAP.get(type))
 

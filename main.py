@@ -1,8 +1,8 @@
 import os
 
 from PyQt5 import uic as UiLoader
-from PyQt5.QtGui import QColor, QPalette
-from PyQt5.QtCore import pyqtSignal as Signal, pyqtSlot as Slot
+from PyQt5.QtGui import QColor, QIcon, QPalette
+from PyQt5.QtCore import QSize, pyqtSignal as Signal, pyqtSlot as Slot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QMessageBox
 
 from utils import *
@@ -38,9 +38,10 @@ class Window(QMainWindow, WSClient):
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
 		self.btn_save_list_log.clicked.connect(self.on_clicked_button_save_list_log)
 		self.m_signal_update_ui.connect(self.slot_update_ui)
-		# set font
+		# set others
 		self.txt_message.setFont(get_default_font())
-		# load  prefs from file
+		self.list_log.setIconSize(QSize(16, 16))
+		# load prefs from file
 		self.prefs_load_from_file()
 
 	def is_default_style(self):
@@ -50,10 +51,11 @@ class Window(QMainWindow, WSClient):
 		self.ws_cleanup()
 		event.accept()
 
-	def log(self, text, color=color_t.normal):
+	def log(self, text, color=color_t.normal, icon=icon_t.none):
 		item = QListWidgetItem(text)
 		item.setFont(get_default_font())
 		item.setForeground(QColor(color))
+		if icon is not icon_t.none: item.setIcon(QIcon(icon))
 		self.list_log.addItem(item)
 		self.list_log.scrollToBottom()
 
@@ -147,7 +149,7 @@ class Window(QMainWindow, WSClient):
 			except Exception as e:
 				QMessageBox.critical(self, "Error", str(e))
 				return
-		self.log(message, color_t.success)
+		self.log(message, color_t.success, icon_t.up)
 
 	def on_clicked_button_clear_list_log(self):
 		self.list_log.clear()
