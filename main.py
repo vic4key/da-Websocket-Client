@@ -2,6 +2,7 @@ import os
 
 from PyQt5 import uic as UiLoader
 from PyQt5.QtGui import QColor, QPalette
+from PyQt5.QtCore import pyqtSignal as Signal, pyqtSlot as Slot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QMessageBox
 
 from utils import *
@@ -10,6 +11,8 @@ from picker import Picker
 from about import AboutDlg
 
 class Window(QMainWindow, WSClient):
+
+	m_signal_update_ui = Signal(bool)
 
 	def __init__(self, app):
 		super(Window, self).__init__()
@@ -34,6 +37,7 @@ class Window(QMainWindow, WSClient):
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
 		self.btn_save_list_log.clicked.connect(self.on_clicked_button_save_list_log)
+		self.m_signal_update_ui.connect(self.slot_update_ui)
 		# set font
 		self.txt_message.setFont(get_default_font())
 		# load  prefs from file
@@ -62,6 +66,10 @@ class Window(QMainWindow, WSClient):
 		self.lbl_status.repaint()
 
 	def update_ui(self, update_values=False):
+		self.m_signal_update_ui.emit(update_values)
+
+	@Slot(bool)
+	def slot_update_ui(self, update_values=False):
 		if update_values:
 			self.txt_endpoint.setText(str(self.m_endpoint))
 			self.chk_auto_use_ssl_chains.setChecked(self.m_autossl)
