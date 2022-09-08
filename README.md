@@ -15,7 +15,8 @@ I googled to find WS Client that support both WS/WSS with specified certificate 
 
 ## Instructions
 
-> 1. Open a CMD/Terminal Window in the `da-Websocket-Client` folder
+*Note: This project required Python 3.6 or newer*
+> 1. Run the command `git clone https://github.com/vic4key/da-Websocket-Client.git` then `cd da-Websocket-Client` to get this repository
 > 2. Run the command `pip install -r requirements.txt` to install required packages
 > 3. Run the command `python app.py` to run app from the source code
 > 4. *(Optional) To build executable file, run the command `pyinstaller --clean --distpath=bin da-Websocket-Client.spec`*
