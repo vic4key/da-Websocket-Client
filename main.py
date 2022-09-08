@@ -2,7 +2,7 @@ import os
 
 from PyQt5 import uic as UiLoader
 from PyQt5.QtGui import QColor, QIcon, QPalette
-from PyQt5.QtCore import QSize, pyqtSignal as Signal, pyqtSlot as Slot
+from PyQt5.QtCore import Qt, QSize, pyqtSignal as Signal, pyqtSlot as Slot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QMessageBox
 
 from utils import *
@@ -55,7 +55,12 @@ class Window(QMainWindow, WSClient):
 		item = QListWidgetItem(text)
 		item.setFont(get_default_font())
 		item.setForeground(QColor(color))
-		if icon is not icon_t.none: item.setIcon(QIcon(icon))
+		data = ""
+		if icon is not icon_t.none:
+			item.setIcon(QIcon(icon))
+			if icon is icon_t.down: data = "[RECV]"
+			elif icon is icon_t.up: data = "[SEND]"
+		item.setData(Qt.UserRole, data)
 		self.list_log.addItem(item)
 		self.list_log.scrollToBottom()
 
@@ -107,8 +112,7 @@ class Window(QMainWindow, WSClient):
 
 	def on_changed_timeout(self):
 		timeout = self.txt_timeout.text().strip()
-		if not timeout.isdecimal():
-			timeout = str(0)
+		if not timeout.isdecimal(): timeout = str(0)
 		self.m_timeout = int(timeout)
 		self.btn_connect.setEnabled(self.ws_spotcheck_params())
 
@@ -155,8 +159,16 @@ class Window(QMainWindow, WSClient):
 		self.list_log.clear()
 
 	def on_clicked_button_save_list_log(self):
-		lines = "\n".join(self.list_log.item(i).text() for i in range(self.list_log.count()))
 		log_file_path = Picker.save_file(self, self.is_default_style(), directory="log.txt", filter="Text Files")
 		if log_file_path == "": return
+		lines = []
+		for i in range(self.list_log.count()):
+			item = self.list_log.item(i)
+			line  = ""
+			line += item.data(Qt.UserRole)
+			line += "\n"
+			line += item.text()
+			line += "\n"
+			lines.append(line)
 		with open(log_file_path, "w+") as f:
-			f.write(lines)
+			f.write("\n".join(lines))
