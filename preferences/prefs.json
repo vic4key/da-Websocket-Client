@@ -4,9 +4,9 @@
     "sslfile": "preferences/local.pem",
     "autossl": true,
     "debug_trace": false,
-    "default_message": "hello from client",
+    "default_message": "Hello from da Websocket Client",
     "default_custom_header": {
-        "test": "test"
+        "Client": "da Websocket Client"
     },
     "websocket_codes": {
         "close": {
