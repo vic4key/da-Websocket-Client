@@ -44,6 +44,7 @@ class WSClient:
 	m_custom_header = {}
 
 	m_ws_threads = {}
+	m_ws_temp_files = []
 
 	def __init__(self, *args, **kwargs):
 		pass
@@ -94,6 +95,9 @@ class WSClient:
 
 	def spotcheck_params(self):
 		return self.m_timeout > 0 and self.m_endpoint.startswith(("ws:", "wss:"))
+
+	def ws_remember_to_delete_temp_file(self, temp_file):
+		self.m_ws_temp_files.append(temp_file)
 
 	def ws_stop_thread(self, ws):
 		if ws in self.m_ws_threads.keys():
@@ -159,12 +163,14 @@ class WSClient:
 					# get self-signed certificate chain from server
 					url = urlparse(self.m_endpoint)
 					ssl_self_signed_file = get_cert_chains_certificates(url.hostname, url.port or 443)
+					self.ws_remember_to_delete_temp_file(ssl_self_signed_file)
 					# combine them all into one and save to a single file in temporary folder
 					if os.path.exists(ssl_default_ca_file) and os.path.exists(ssl_self_signed_file):
 						content = ""
 						with open(ssl_default_ca_file, "r") as f:  content += f.read() + "\n"
 						with open(ssl_self_signed_file, "r") as f: content += f.read() + "\n"
 						sslfile = store_as_temporary_file(content.encode())
+						self.ws_remember_to_delete_temp_file(sslfile)
 				elif os.path.exists(self.m_sslfile): # get from specified cert file
 					sslfile = self.m_sslfile
 				# create ssl context
@@ -202,3 +208,12 @@ class WSClient:
 			self.m_ws.close()
 			self.ws_stop_thread(self.m_ws)
 		self.status("Closed")
+
+	def	ws_cleanup(self):
+		self.ws_close()
+		for ws in self.m_ws_threads.keys():
+			ws.close()
+			self.ws_stop_thread(ws)
+		for e in self.m_ws_temp_files:
+			if os.path.exists(e):
+				os.unlink(e)

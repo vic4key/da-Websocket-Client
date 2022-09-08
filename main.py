@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QMessage
 
 from utils import *
 from client import *
-from about import AboutDlg
 from picker import Picker
+from about import AboutDlg
 
 class Window(QMainWindow, WSClient):
 
@@ -43,7 +43,7 @@ class Window(QMainWindow, WSClient):
 		return QApplication.instance().style().metaObject().className() == "QWindowsVistaStyle"
 
 	def closeEvent(self, event):
-		self.ws_close()
+		self.ws_cleanup()
 		event.accept()
 
 	def log(self, text, color=color_t.normal):
@@ -88,7 +88,7 @@ class Window(QMainWindow, WSClient):
 		self.prefs_save_to_file()
 
 	def on_triggered_menu_file_exit(self):
-		self.ws_close()
+		self.ws_cleanup()
 		return self.close()
 
 	def on_changed_endpoint(self):

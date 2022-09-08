@@ -9,7 +9,7 @@ def get_current_directory():
 	result = ""
 	try: result = sys._MEIPASS
 	except: result = os.path.abspath(".")
-	return result
+	return normalize_path(result)
 
 def resources(file):
 	return os.path.join(get_current_directory(), os.path.join("resources", file))
@@ -35,7 +35,7 @@ def store_as_temporary_file(content):
 		f.close()
 		result = f.name
 	except Exception as e: print(e)
-	return result
+	return normalize_path(result)
 
 def get_cert_chains_certificates(host, port=443):
 	result = None
@@ -53,7 +53,7 @@ def get_cert_chains_certificates(host, port=443):
 		s.shutdown()
 	except Exception as e: print(e)
 	if not s is None: s.close()
-	return "" if result is None else store_as_temporary_file(result)
+	return normalize_path("" if result is None else store_as_temporary_file(result))
 
 def get_default_ca_trust_root_certificates():
 	cacert_path = os.path.join(get_current_directory(), "preferences", "cacert.pem")
