@@ -13,6 +13,7 @@ from about import AboutDlg
 class Window(QMainWindow, WSClient):
 
 	m_signal_update_ui = Signal(bool)
+	m_signal_update_status = Signal(str, color_t)
 
 	def __init__(self, app):
 		super(Window, self).__init__()
@@ -38,6 +39,7 @@ class Window(QMainWindow, WSClient):
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
 		self.btn_save_list_log.clicked.connect(self.on_clicked_button_save_list_log)
 		self.m_signal_update_ui.connect(self.slot_update_ui)
+		self.m_signal_update_status.connect(self.slot_status)
 		# set others
 		self.txt_message.setFont(get_default_font())
 		self.list_log.setIconSize(QSize(16, 16))
@@ -65,6 +67,10 @@ class Window(QMainWindow, WSClient):
 		self.list_log.scrollToBottom()
 
 	def status(self, text, color=color_t.normal):
+		self.m_signal_update_status.emit(text, color)
+
+	@Slot(str, color_t)
+	def slot_status(self, text, color=color_t.normal):
 		palette = self.lbl_status.palette()
 		palette.setColor(QPalette.WindowText, QColor(color))
 		self.lbl_status.setPalette(palette)
