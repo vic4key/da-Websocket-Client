@@ -173,7 +173,7 @@ class Window(QMainWindow, WSClient):
 		self.list_log.clear()
 
 	def on_clicked_button_save_list_log(self):
-		log_file_path = Picker.save_file(self, self.is_default_style(), directory="log.txt", filter="Text Files")
+		log_file_path = Picker.save_file(self, self.is_default_style(), directory="log_data.txt", filter="Text Files")
 		if log_file_path == "": return
 		lines = []
 		for i in range(self.list_log.count()):
@@ -191,7 +191,7 @@ class Window(QMainWindow, WSClient):
 		self.list_debug.clear()
 
 	def on_clicked_button_save_list_debug(self):
-		debug_file_path = Picker.save_file(self, self.is_default_style(), directory="debug.txt", filter="Text Files")
+		debug_file_path = Picker.save_file(self, self.is_default_style(), directory="log_debug.txt", filter="Text Files")
 		if debug_file_path == "": return
 		lines = []
 		for i in range(self.list_debug.count()):
