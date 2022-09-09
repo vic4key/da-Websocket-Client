@@ -153,7 +153,7 @@ class WSClient:
 		return not self.m_ws is None
 
 	def ws_start(self, use_ssl):
-		websocket.enableTrace(traceable=True, handler=WSHandler(self.list_debug))
+		websocket.enableTrace(traceable=True, handler=WSHandler(self))
 		websocket.setdefaulttimeout(self.m_timeout)
 
 		if use_ssl: self.status("Initializing SSL connection ...", color_t.warn)

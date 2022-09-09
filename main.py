@@ -15,6 +15,7 @@ class Window(QMainWindow, WSClient):
 	m_signal_update_ui = Signal(bool)
 	m_signal_status = Signal(str, color_t)
 	m_signal_log = Signal(str, color_t, icon_t)
+	m_signal_debug = Signal(str)
 
 	def __init__(self, app):
 		super(Window, self).__init__()
@@ -44,6 +45,7 @@ class Window(QMainWindow, WSClient):
 		self.m_signal_update_ui.connect(self.slot_update_ui)
 		self.m_signal_status.connect(self.slot_status)
 		self.m_signal_log.connect(self.slot_log)
+		self.m_signal_debug.connect(self.slot_debug)
 		# set others
 		self.txt_message.setFont(get_default_font())
 		self.list_log.setIconSize(QSize(16, 16))
@@ -60,6 +62,17 @@ class Window(QMainWindow, WSClient):
 	def closeEvent(self, event):
 		self.ws_cleanup()
 		event.accept()
+
+	def debug(self, text):
+		self.m_signal_debug.emit(text)
+
+	@Slot(str)
+	def slot_debug(self, text):
+		item = QListWidgetItem(text)
+		item.setFont(get_default_font())
+		item.setData(Qt.UserRole, "")
+		self.list_debug.addItem(item)
+		self.list_debug.scrollToBottom()
 
 	def log(self, text, color=color_t.normal, icon=icon_t.none):
 		self.m_signal_log.emit(text, color, icon)
@@ -193,8 +206,6 @@ class Window(QMainWindow, WSClient):
 
 	def on_clicked_button_clear_list_debug(self):
 		self.list_debug.clear()
-		w, h = self.splitter.sizes()
-		self.splitter.setSizes([w, 0])
 
 	def on_clicked_button_save_list_debug(self):
 		debug_file_path = Picker.save_file(self, self.is_default_style(), directory="log_debug.txt", filter="Text Files")
