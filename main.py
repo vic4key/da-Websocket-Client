@@ -49,6 +49,10 @@ class Window(QMainWindow, WSClient):
 		self.list_log.setIconSize(QSize(16, 16))
 		# load prefs from file
 		self.prefs_load_from_file()
+		# hide the debug window as default
+		if not self.m_debug:
+			w, _ = self.splitter.sizes()
+			self.splitter.setSizes([w, 0])
 
 	def is_default_style(self):
 		return QApplication.instance().style().metaObject().className() == "QWindowsVistaStyle"
@@ -189,6 +193,8 @@ class Window(QMainWindow, WSClient):
 
 	def on_clicked_button_clear_list_debug(self):
 		self.list_debug.clear()
+		w, h = self.splitter.sizes()
+		self.splitter.setSizes([w, 0])
 
 	def on_clicked_button_save_list_debug(self):
 		debug_file_path = Picker.save_file(self, self.is_default_style(), directory="log_debug.txt", filter="Text Files")
