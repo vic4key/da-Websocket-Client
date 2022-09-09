@@ -39,6 +39,8 @@ class Window(QMainWindow, WSClient):
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
 		self.btn_save_list_log.clicked.connect(self.on_clicked_button_save_list_log)
+		self.btn_clear_list_debug.clicked.connect(self.on_clicked_button_clear_list_debug)
+		self.btn_save_list_debug.clicked.connect(self.on_clicked_button_save_list_debug)
 		self.m_signal_update_ui.connect(self.slot_update_ui)
 		self.m_signal_status.connect(self.slot_status)
 		self.m_signal_log.connect(self.slot_log)
@@ -175,7 +177,7 @@ class Window(QMainWindow, WSClient):
 		if log_file_path == "": return
 		lines = []
 		for i in range(self.list_log.count()):
-			item = self.list_log.item(i)
+			item  = self.list_log.item(i)
 			line  = ""
 			line += item.data(Qt.UserRole)
 			line += "\n"
@@ -183,4 +185,20 @@ class Window(QMainWindow, WSClient):
 			line += "\n"
 			lines.append(line)
 		with open(log_file_path, "w+") as f:
+			f.write("\n".join(lines))
+
+	def on_clicked_button_clear_list_debug(self):
+		self.list_debug.clear()
+
+	def on_clicked_button_save_list_debug(self):
+		debug_file_path = Picker.save_file(self, self.is_default_style(), directory="debug.txt", filter="Text Files")
+		if debug_file_path == "": return
+		lines = []
+		for i in range(self.list_debug.count()):
+			item  = self.list_debug.item(i)
+			line  = ""
+			line += item.text()
+			line += "\n"
+			lines.append(line)
+		with open(debug_file_path, "w+") as f:
 			f.write("\n".join(lines))
