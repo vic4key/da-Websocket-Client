@@ -199,12 +199,6 @@ class Window(QMainWindow, WSClient):
 	def on_clicked_button_save_list_debug(self):
 		debug_file_path = Picker.save_file(self, self.is_default_style(), directory="log_debug.txt", filter="Text Files")
 		if debug_file_path == "": return
-		lines = []
-		for i in range(self.list_debug.count()):
-			item  = self.list_debug.item(i)
-			line  = ""
-			line += item.text()
-			line += "\n"
-			lines.append(line)
+		lines = [self.list_debug.item(i).text() for i in range(self.list_debug.count())]
 		with open(debug_file_path, "w+") as f:
 			f.write("\n".join(lines))

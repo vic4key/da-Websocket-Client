@@ -8,6 +8,7 @@ from websocket import ABNF
 from urllib.parse import urlparse
 
 from utils import *
+from logger import WSHandler
 from thread import StoppableThread
 
 DEFAULT_TIME_OUT = 30
@@ -76,7 +77,7 @@ class WSClient:
 					self.m_prefs = json.loads(f.read())
 					self.m_timeout = self.prefs_get("timeout", DEFAULT_TIME_OUT)
 					self.m_endpoint = self.prefs_get("endpoint").strip()
-					self.m_debug = self.prefs_get("debug_trace", False)
+					self.m_debug = self.prefs_get("show_debug_window", False)
 					self.m_message = self.prefs_get("default_message")
 					self.m_ws_codes = self.prefs_get("websocket_codes", {})
 					self.m_custom_header = self.prefs_get("default_custom_header", {})
@@ -92,7 +93,7 @@ class WSClient:
 		self.prefs_set("timeout", self.m_timeout)
 		self.prefs_set("autossl", self.m_autossl)
 		self.prefs_set("sslfile", self.m_sslfile)
-		self.prefs_set("debug_trace", self.m_debug)
+		self.prefs_set("show_debug_window", self.m_debug)
 		self.prefs_set("default_message", self.m_message)
 		self.prefs_set("default_custom_header", self.m_custom_header)
 		with open(PREFS_FILE_NAME, "w+") as f:
@@ -152,7 +153,7 @@ class WSClient:
 		return not self.m_ws is None
 
 	def ws_start(self, use_ssl):
-		websocket.enableTrace(self.m_debug)
+		websocket.enableTrace(traceable=True, handler=WSHandler(self.list_debug))
 		websocket.setdefaulttimeout(self.m_timeout)
 
 		if use_ssl: self.status("Initializing SSL connection ...", color_t.warn)

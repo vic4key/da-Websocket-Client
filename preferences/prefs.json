@@ -3,7 +3,7 @@
     "timeout": 30,
     "sslfile": "preferences/local.pem",
     "autossl": true,
-    "debug_trace": false,
+    "show_debug_window": false,
     "default_message": "Hello from da Websocket Client",
     "default_custom_header": {
         "Client": "da Websocket Client"
