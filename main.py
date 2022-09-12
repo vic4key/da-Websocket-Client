@@ -37,6 +37,8 @@ class Window(QMainWindow, WSClient):
 		self.chk_auto_use_ssl_chains.clicked.connect(self.on_clicked_auto_use_ssl_chains)
 		self.btn_browse_ssl_file.clicked.connect(self.on_clicked_button_browse_ssl_file)
 		self.chk_ping.clicked.connect(self.on_clicked_auto_ping)
+		self.txt_ping_interval.textChanged.connect(self.on_changed_ping_interval)
+		self.txt_ping_timeout.textChanged.connect(self.on_changed_ping_timeout)
 		self.txt_message.textChanged.connect(self.on_changed_message)
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
@@ -47,7 +49,7 @@ class Window(QMainWindow, WSClient):
 		self.m_signal_status.connect(self.slot_status)
 		self.m_signal_log.connect(self.slot_log)
 		self.m_signal_debug.connect(self.slot_debug)
-		# set others
+		# others
 		self.txt_ping_message.setFont(get_default_font())
 		self.txt_message.setFont(get_default_font())
 		self.list_log.setIconSize(QSize(16, 16))
@@ -57,6 +59,8 @@ class Window(QMainWindow, WSClient):
 		if not self.m_debug:
 			w, _ = self.splitter.sizes()
 			self.splitter.setSizes([w, 0])
+		# others
+		self.txt_endpoint.setCursorPosition(0)
 
 	def is_default_style(self):
 		return QApplication.instance().style().metaObject().className() == "QWindowsVistaStyle"
@@ -151,6 +155,18 @@ class Window(QMainWindow, WSClient):
 		timeout = self.txt_timeout.text().strip()
 		if not timeout.isdecimal(): timeout = str(0)
 		self.m_timeout = int(timeout)
+		self.btn_connect.setEnabled(self.ws_spotcheck_params())
+
+	def on_changed_ping_interval(self):
+		interval = self.txt_ping_interval.text().strip()
+		if not interval.isdecimal(): interval = str(0)
+		self.m_ping_interval = int(interval)
+		self.btn_connect.setEnabled(self.ws_spotcheck_params())
+
+	def on_changed_ping_timeout(self):
+		timeout = self.txt_ping_timeout.text().strip()
+		if not timeout.isdecimal(): timeout = str(0)
+		self.m_ping_timeout = int(timeout)
 		self.btn_connect.setEnabled(self.ws_spotcheck_params())
 
 	def on_changed_message(self):

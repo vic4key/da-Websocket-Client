@@ -148,7 +148,10 @@ class WSClient:
 			del self.m_ws_threads[ws]
 
 	def ws_spotcheck_params(self):
-		return self.m_timeout > 0 and self.m_endpoint.startswith(("ws:", "wss:"))
+		result = self.m_timeout > 0 and self.m_endpoint.startswith(("ws:", "wss:"))
+		if self.m_autoping:
+			result = result and self.m_ping_interval > 0 and self.m_ping_timeout > 0
+		return result
 
 	def ws_on_open(self, ws):
 		self.m_ws = ws
