@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>700</height>
+    <height>757</height>
    </rect>
   </property>
   <property name="font">
@@ -579,7 +579,7 @@
        </layout>
       </widget>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_debug_group">
         <property name="spacing">
          <number>6</number>
         </property>
@@ -610,7 +610,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QHBoxLayout" name="horizontalLayout_debug">
           <item>
            <widget class="QListWidget" name="list_debug">
             <property name="minimumSize">
@@ -625,7 +625,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_debug_buttons">
             <item>
              <widget class="QPushButton" name="btn_clear_list_debug">
               <property name="maximumSize">
