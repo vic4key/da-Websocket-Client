@@ -39,6 +39,7 @@ class Window(QMainWindow, WSClient):
 		self.chk_ping.clicked.connect(self.on_clicked_auto_ping)
 		self.txt_ping_interval.textChanged.connect(self.on_changed_ping_interval)
 		self.txt_ping_timeout.textChanged.connect(self.on_changed_ping_timeout)
+		self.txt_ping_message.textChanged.connect(self.on_changed_ping_message)
 		self.txt_message.textChanged.connect(self.on_changed_message)
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
@@ -124,6 +125,7 @@ class Window(QMainWindow, WSClient):
 			self.chk_ping.setChecked(self.m_autoping)
 			self.txt_ping_interval.setText(str(self.m_ping_interval))
 			self.txt_ping_timeout.setText(str(self.m_ping_timeout))
+			self.txt_ping_message.setPlainText(self.m_ping_message)
 		self.txt_endpoint.setEnabled(not self.ws_ready())
 		self.txt_timeout.setEnabled(not self.ws_ready())
 		self.chk_auto_use_ssl_chains.setEnabled(not self.ws_ready())
@@ -168,6 +170,9 @@ class Window(QMainWindow, WSClient):
 		if not timeout.isdecimal(): timeout = str(0)
 		self.m_ping_timeout = int(timeout)
 		self.btn_connect.setEnabled(self.ws_spotcheck_params())
+
+	def on_changed_ping_message(self):
+		self.m_ping_message = self.txt_ping_message.toPlainText()
 
 	def on_changed_message(self):
 		self.m_message = self.txt_message.toPlainText()
