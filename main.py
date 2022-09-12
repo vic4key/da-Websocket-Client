@@ -125,7 +125,6 @@ class Window(QMainWindow, WSClient):
 		self.chk_auto_use_ssl_chains.setEnabled(not self.ws_ready())
 		self.txt_ssl_file_path.setEnabled(not (self.m_autossl or self.ws_ready()))
 		self.btn_browse_ssl_file.setEnabled(not (self.m_autossl or self.ws_ready()))
-		self.txt_message.setEnabled(self.ws_ready())
 		self.btn_send_message.setEnabled(self.ws_ready())
 		self.btn_connect.setText("DISCONNECT" if self.ws_ready() else "CONNECT")
 		self.txt_ping_interval.setEnabled(self.m_autoping and not self.ws_ready())
