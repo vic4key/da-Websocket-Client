@@ -20,11 +20,3 @@ class Sample(PluginTemplate):
 
   def on_recv(self, ws, data, type, continuous):
     print("WS received =>", ws, "<data>", type, continuous)
-
-  def on_ping(self, ws, message):
-    print("WS on_ping =>", ws, data)
-    return
-
-  def on_pong(self, ws, message):
-    print("WS on_pong =>", ws, data)
-    return

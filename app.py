@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
 	# apply_stylesheet(app, theme='dark_teal.xml')
 
-	plugin.initialize()
+	plugin.initialize(win)
 
 	win.show()
 

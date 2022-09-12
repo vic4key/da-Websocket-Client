@@ -6,6 +6,11 @@ from pluginlib import Parent
 class PluginTemplate(object):
   ''' Plugin Template '''
 
+  m_ui = None
+
+  def attach_ui(self, ui):
+    self.m_ui = ui
+
   def on_open(self, ws): 
     return
 
@@ -33,7 +38,11 @@ from pluginlib import PluginLoader, PluginImportError
 
 _plugins = None
 
-def initialize():
+def plugins():
+  global _plugins
+  return None if _plugins is None else _plugins.Plugin.values()
+
+def initialize(ui):
   global _plugins
   if _plugins is None:
     loader = PluginLoader(modules=["plugins"])
@@ -41,7 +50,4 @@ def initialize():
       _plugins = loader.plugins
     except PluginImportError as e:
       print(e)
-
-def plugins():
-  global _plugins
-  return None if _plugins is None else _plugins.Plugin.values()
+    for e in plugins(): e.attach_ui(e, ui)
