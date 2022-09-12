@@ -181,6 +181,10 @@ class Window(QMainWindow, WSClient):
 					if not os.path.exists(self.m_sslfile):
 						self.status("This end-point required SSL file", color_t.error)
 						return
+			if self.m_autoping:
+				if self.m_ping_interval <= self.m_ping_timeout: # refer to websocket._app.py!WebSocketApp.run_forever(...)
+					QMessageBox.critical(self, "Error", "Ping required interval-time is greater than ping time-out")
+					return
 			self.ws_start(use_ssl)
 		else:
 			self.ws_close()

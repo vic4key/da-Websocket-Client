@@ -10,8 +10,8 @@
     },
     "ping": {
         "enabled": false,
-        "interval": 5,
-        "timeout": 30,
+        "interval": 15,
+        "timeout": 5,
         "message": "This is a ping message"
     },
     "websocket_codes": {
