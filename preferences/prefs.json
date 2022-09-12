@@ -8,6 +8,12 @@
     "default_custom_header": {
         "Client": "da Websocket Client"
     },
+    "ping": {
+        "enabled": false,
+        "interval": 5,
+        "timeout": 30,
+        "message": "This is a ping message"
+    },
     "websocket_codes": {
         "close": {
             "1000": "Normal Closure",

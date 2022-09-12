@@ -13,6 +13,7 @@ from thread import StoppableThread
 
 import plugin
 
+DEFAULT_TIME_INTERVAL = 5
 DEFAULT_TIME_OUT = 30
 DEFAULT_DEBUG_TRACE = False
 PREFS_FILE_NAME = normalize_path("preferences/prefs.json")
@@ -50,6 +51,10 @@ class WSClient:
 	m_debug = DEFAULT_DEBUG_TRACE
 	m_timeout = DEFAULT_TIME_OUT
 	m_custom_header = {}
+	m_autoping = False
+	m_ping_interval = DEFAULT_TIME_INTERVAL
+	m_ping_timeout = DEFAULT_TIME_OUT
+	m_ping_message = ""
 
 	m_ws_threads = {}
 	m_ws_temp_files = []
@@ -67,37 +72,68 @@ class WSClient:
 		assert False, "missing implementation"
 
 	def prefs_get(self, name, default=""):
-		return self.m_prefs[name] if name in self.m_prefs.keys() else default
+		parts = name.split(".")
+		if len(parts) == 1:
+			prefs = self.m_prefs
+		elif len(parts) == 2:
+			if parts[0] in self.m_prefs.keys():
+				prefs = self.m_prefs[parts[0]]
+				name = parts[1]
+		return prefs[name] if name in prefs.keys() else default
 
 	def prefs_set(self, name, value):
-		self.m_prefs[name] = value
+		parts = name.split(".")
+		if len(parts) == 1:
+			prefs = self.m_prefs
+		elif len(parts) == 2:
+			if not parts[0] in self.m_prefs.keys():
+				self.m_prefs[parts[0]] = {}
+			prefs = self.m_prefs[parts[0]]
+			name = parts[1]
+		prefs[name] = value
 
 	def prefs_load_from_file(self):
 		try:
 			if os.path.exists(PREFS_FILE_NAME):
 				with open(PREFS_FILE_NAME, "r+") as f:
 					self.m_prefs = json.loads(f.read())
-					self.m_timeout = self.prefs_get("timeout", DEFAULT_TIME_OUT)
+					# connection
 					self.m_endpoint = self.prefs_get("endpoint").strip()
+					self.m_timeout = self.prefs_get("timeout", DEFAULT_TIME_OUT)
 					self.m_debug = self.prefs_get("show_debug_window", False)
 					self.m_message = self.prefs_get("default_message")
-					self.m_ws_codes = self.prefs_get("websocket_codes", {})
 					self.m_custom_header = self.prefs_get("default_custom_header", {})
+					# auto ssl
 					self.m_autossl = self.prefs_get("autossl", True)
 					self.m_sslfile = self.prefs_get("sslfile").strip()
 					self.m_sslfile = normalize_path(self.m_sslfile)
+					# auto ping
+					self.m_autoping = self.prefs_get("ping.enabled", False)
+					self.m_ping_interval = self.prefs_get("ping.interval", DEFAULT_TIME_INTERVAL)
+					self.m_ping_timeout = self.prefs_get("ping.timeout", DEFAULT_TIME_OUT)
+					self.m_ping_message= self.prefs_get("ping.message")
+					# others
+					self.m_ws_codes = self.prefs_get("websocket_codes", {})
 		except:
 			self.status("Loading preferences file failed", color_t.error)
 		self.update_ui(True)
 
 	def prefs_save_to_file(self):
+		# connection
 		self.prefs_set("endpoint", self.m_endpoint)
 		self.prefs_set("timeout", self.m_timeout)
-		self.prefs_set("autossl", self.m_autossl)
-		self.prefs_set("sslfile", self.m_sslfile)
 		self.prefs_set("show_debug_window", self.m_debug)
 		self.prefs_set("default_message", self.m_message)
 		self.prefs_set("default_custom_header", self.m_custom_header)
+		# auto ssl
+		self.prefs_set("autossl", self.m_autossl)
+		self.prefs_set("sslfile", self.m_sslfile)
+		# auto ping
+		self.prefs_set("ping.enabled", self.m_autoping)
+		self.prefs_set("ping.interval", self.m_ping_interval)
+		self.prefs_set("ping.timeout", self.m_ping_timeout)
+		self.prefs_set("ping.message", self.m_ping_message)
+		# save to file
 		with open(PREFS_FILE_NAME, "w+") as f:
 			f.write(json.dumps(self.m_prefs, indent=4))
 
