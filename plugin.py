@@ -1,6 +1,6 @@
 from pluginlib import Parent
 
-# Plugin Base
+# Plugin Template
 
 @Parent("Plugin")
 class PluginTemplate(object):
