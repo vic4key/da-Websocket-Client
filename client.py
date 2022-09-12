@@ -11,6 +11,8 @@ from utils import *
 from logger import WSHandler
 from thread import StoppableThread
 
+import plugin
+
 DEFAULT_TIME_OUT = 30
 DEFAULT_DEBUG_TRACE = False
 PREFS_FILE_NAME = normalize_path("preferences/prefs.json")
@@ -114,6 +116,7 @@ class WSClient:
 		self.m_ws = ws
 		self.status("Opened", color_t.success)
 		self.update_ui()
+		for e in plugin.plugins(): e.on_open(e, ws)
 
 	def ws_on_close(self, ws, close_status_code, close_msg):
 		text = "Closed"
@@ -131,12 +134,20 @@ class WSClient:
 		self.stop_thread(ws)
 		self.m_ws = None
 		self.update_ui()
+		for e in plugin.plugins(): e.on_close(e, ws, close_status_code, close_msg)
 
 	def ws_on_error(self, ws, error):
 		self.m_ws = None
 		self.status(str(error), color_t.error)
 		self.update_ui()
+		for e in plugin.plugins(): e.on_error(e, ws, error)
 		if error: raise error
+
+	def ws_on_ping(self, ws, message):
+		for e in plugin.plugins(): e.on_ping(e, ws, message)
+
+	def ws_on_pong(self, ws, message):
+		for e in plugin.plugins(): e.on_pong(e, ws, message)
 
 	def ws_on_data(self, ws, data, type, continuous):
 		if type == ABNF.OPCODE_TEXT:
@@ -145,9 +156,12 @@ class WSClient:
 			self.log(hex_view(data), color_t.red, icon_t.down)
 		else:
 			print("received data type did not support", ABNF.OPCODE_MAP.get(type))
+		for e in plugin.plugins(): e.on_recv(e, ws, data, type, continuous)
 
 	def ws_send(self, data, opcode=ABNF.OPCODE_TEXT):
-		if self.ws_ready(): self.m_ws.send(data, opcode)
+		if self.ws_ready():
+			self.m_ws.send(data, opcode)
+			for e in plugin.plugins(): e.on_send(e, self.m_ws, data, opcode)
 
 	def ws_ready(self):
 		return not self.m_ws is None
@@ -196,11 +210,18 @@ class WSClient:
 			on_close=self.ws_on_close,
 			on_data=self.ws_on_data,
 			on_error=self.ws_on_error,
+			on_ping=self.ws_on_ping,
+			on_pong=self.ws_on_pong,
 		)
 
 		def run(*args):
 			try:
-				ws.run_forever(sslopt=ssl_opt)
+				ws.run_forever(
+					sslopt=ssl_opt,
+					# ping_interval=2,
+					# ping_timeout=10,
+					# ping_payload="this is ping message",
+				)
 			except Exception as e:
 				ws.close()
 				self.stop_thread(ws)

@@ -34,7 +34,7 @@ I googled to find WS Client that support both WS/WSS with specified certificate 
 - [ ] Consider to support sending file
 - [ ] Consider to support more like Socket IO, MQTT, etc
 - [x] Support debug logging to allow user knowing what is backend working like packet header, raw data, etc
-- [ ] Support python plugin system to allow user easy to custom, hijack, mitm, handle, etc without any complex installation
+- [ ] *Support python plugin system to allow user easy to custom, hijack, mitm, handle, etc without any complex installation `DOING`*
 
 ## Contact
 

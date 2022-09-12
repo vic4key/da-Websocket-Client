@@ -15,6 +15,7 @@ pyqt5ac.main(
 ])
 import resources
 
+import plugin
 from main import Window
 
 # pip install QDarkStyle
@@ -44,6 +45,8 @@ if __name__ == "__main__":
 	# app.setStyleSheet(qtstylish.light())
 
 	# apply_stylesheet(app, theme='dark_teal.xml')
+
+	plugin.initialize()
 
 	win.show()
 
