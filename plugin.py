@@ -2,9 +2,9 @@ from pluginlib import Parent
 
 # Plugin Base
 
-@Parent("WSPlugin")
-class WSPluginBase(object):
-    ''' WS Plugin Base '''
+@Parent("Plugin")
+class PluginTemplate(object):
+    ''' Plugin Template '''
 
     def on_open(self, ws): 
         return
@@ -44,4 +44,4 @@ def initialize():
 
 def plugins():
     global _plugins
-    return None if _plugins is None else _plugins.WSPlugin.values()
+    return None if _plugins is None else _plugins.Plugin.values()

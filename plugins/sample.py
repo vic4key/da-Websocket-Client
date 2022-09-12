@@ -1,6 +1,6 @@
-from plugin import WSPluginBase
+from plugin import PluginTemplate
 
-class Sample(WSPluginBase):
+class Sample(PluginTemplate):
     _alias_ = "Sample"
     _version_ = "1.0"
     # _skipload_ = True
