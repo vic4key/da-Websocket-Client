@@ -40,6 +40,7 @@ class Window(QMainWindow, WSClient):
 		self.txt_ping_interval.textChanged.connect(self.on_changed_ping_interval)
 		self.txt_ping_timeout.textChanged.connect(self.on_changed_ping_timeout)
 		self.txt_ping_message.textChanged.connect(self.on_changed_ping_message)
+		self.btn_ping_message.clicked.connect(self.on_clicked_button_ping_send_message)
 		self.txt_message.textChanged.connect(self.on_changed_message)
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
@@ -133,8 +134,10 @@ class Window(QMainWindow, WSClient):
 		self.btn_browse_ssl_file.setEnabled(not (self.m_autossl or self.ws_ready()))
 		self.btn_send_message.setEnabled(self.ws_ready())
 		self.btn_connect.setText("DISCONNECT" if self.ws_ready() else "CONNECT")
+		self.chk_ping.setEnabled(not self.ws_ready())
 		self.txt_ping_interval.setEnabled(self.m_autoping and not self.ws_ready())
 		self.txt_ping_timeout.setEnabled(self.m_autoping and not self.ws_ready())
+		self.btn_ping_message.setEnabled(self.ws_ready())
 	
 	def selected_send_data_type(self):
 		return abs(self.buttonGroup_message.checkedId()) - 2
@@ -173,6 +176,7 @@ class Window(QMainWindow, WSClient):
 
 	def on_changed_ping_message(self):
 		self.m_ping_message = self.txt_ping_message.toPlainText()
+		self.btn_ping_message.setEnabled(self.ws_spotcheck_params())
 
 	def on_changed_message(self):
 		self.m_message = self.txt_message.toPlainText()
@@ -205,6 +209,10 @@ class Window(QMainWindow, WSClient):
 	def on_clicked_auto_ping(self):
 		self.m_autoping = self.chk_ping.isChecked()
 		self.update_ui()
+
+	def on_clicked_button_ping_send_message(self):
+		self.ws_ping(self.m_ping_message)
+		self.log(self.m_ping_message, color_t.orange, icon_t.up)
 
 	def on_clicked_button_send_message(self):
 		message = self.m_message

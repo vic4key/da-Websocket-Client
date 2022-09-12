@@ -185,9 +185,13 @@ class WSClient:
 		if error: raise error
 
 	def ws_on_ping(self, ws, message):
+		if isinstance(message, bytes): message = message.decode("utf-8")
+		self.log(message, color_t.red, icon_t.up)
 		for e in plugin.plugins(): e.on_ping(e, ws, message)
 
 	def ws_on_pong(self, ws, message):
+		if isinstance(message, bytes): message = message.decode("utf-8")
+		self.log(message, color_t.red, icon_t.down)
 		for e in plugin.plugins(): e.on_pong(e, ws, message)
 
 	def ws_on_data(self, ws, data, type, continuous):
@@ -203,6 +207,11 @@ class WSClient:
 		if self.ws_ready():
 			self.m_ws.send(data, opcode)
 			for e in plugin.plugins(): e.on_send(e, self.m_ws, data, opcode)
+
+	def ws_ping(self, payload=""):
+		if self.ws_ready():
+			self.m_ws.sock.ping(payload)
+			for e in plugin.plugins(): e.on_ping(e, self.m_ws, payload)
 
 	def ws_ready(self):
 		return not self.m_ws is None
