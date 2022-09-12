@@ -37,7 +37,7 @@
        <enum>Qt::Vertical</enum>
       </property>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1,0,0,0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,1,0,0,0,0,0">
         <property name="leftMargin">
          <number>6</number>
         </property>
@@ -93,6 +93,12 @@
          <layout class="QHBoxLayout" name="horizontalLayout_ssl" stretch="0,1,0">
           <item>
            <widget class="QCheckBox" name="chk_auto_use_ssl_chains">
+            <property name="minimumSize">
+             <size>
+              <width>132</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatically select and use &lt;span style=&quot; font-weight:700;&quot;&gt;self-signed&lt;/span&gt; or &lt;span style=&quot; font-weight:700;&quot;&gt;publicly-trusted-signed&lt;/span&gt; certification&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -136,9 +142,169 @@
          </layout>
         </item>
         <item>
+         <widget class="Line" name="line_6">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_ping">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_ping">
+            <item>
+             <widget class="QCheckBox" name="chk_ping">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatically ping to server&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Automatically Ping</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Interval</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txt_ping_interval">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The ping interval in seconds&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="inputMask">
+               <string>999</string>
+              </property>
+              <property name="maxLength">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="minimumSize">
+               <size>
+                <width>70</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>seconds</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Time-out</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txt_ping_timeout">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The ping time-out in seconds&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="inputMask">
+               <string>999</string>
+              </property>
+              <property name="maxLength">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="minimumSize">
+               <size>
+                <width>70</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>seconds</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPlainTextEdit" name="txt_ping_message">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>27</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Courier New</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="placeholderText">
+             <string>enter ping message here ...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_timeout" stretch="0,0,1">
           <item>
            <widget class="QLabel" name="label_2">
+            <property name="minimumSize">
+             <size>
+              <width>132</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>60</width>
@@ -146,7 +312,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Time-out</string>
+             <string>Connecting Time-out</string>
             </property>
            </widget>
           </item>
@@ -179,7 +345,14 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_log" stretch="0,1">
+         <widget class="Line" name="line_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_status" stretch="0,1">
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
@@ -211,12 +384,18 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_log_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_log">
           <property name="bottomMargin">
            <number>6</number>
           </property>
           <item>
            <widget class="QListWidget" name="list_log">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>200</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Courier New</family>
@@ -345,7 +524,7 @@
              <bool>true</bool>
             </property>
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -353,7 +532,7 @@
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>70</height>
+              <height>16777215</height>
              </size>
             </property>
             <property name="baseSize">
