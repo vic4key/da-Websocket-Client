@@ -79,6 +79,7 @@ class WSClient:
 			if parts[0] in self.m_prefs.keys():
 				prefs = self.m_prefs[parts[0]]
 				name = parts[1]
+		else: assert False, "prefs get faied -> unsupported"
 		return prefs[name] if name in prefs.keys() else default
 
 	def prefs_set(self, name, value):
@@ -90,6 +91,7 @@ class WSClient:
 				self.m_prefs[parts[0]] = {}
 			prefs = self.m_prefs[parts[0]]
 			name = parts[1]
+		else: assert False, "prefs set faied -> unsupported"
 		prefs[name] = value
 
 	def prefs_load_from_file(self):
