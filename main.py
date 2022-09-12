@@ -36,6 +36,7 @@ class Window(QMainWindow, WSClient):
 		self.btn_connect.clicked.connect(self.on_clicked_button_connect)
 		self.chk_auto_use_ssl_chains.clicked.connect(self.on_clicked_auto_use_ssl_chains)
 		self.btn_browse_ssl_file.clicked.connect(self.on_clicked_button_browse_ssl_file)
+		self.chk_ping.clicked.connect(self.on_clicked_auto_ping)
 		self.txt_message.textChanged.connect(self.on_changed_message)
 		self.btn_send_message.clicked.connect(self.on_clicked_button_send_message)
 		self.btn_clear_list_log.clicked.connect(self.on_clicked_button_clear_list_log)
@@ -47,6 +48,7 @@ class Window(QMainWindow, WSClient):
 		self.m_signal_log.connect(self.slot_log)
 		self.m_signal_debug.connect(self.slot_debug)
 		# set others
+		self.txt_ping_message.setFont(get_default_font())
 		self.txt_message.setFont(get_default_font())
 		self.list_log.setIconSize(QSize(16, 16))
 		# load prefs from file
@@ -115,6 +117,9 @@ class Window(QMainWindow, WSClient):
 			self.txt_ssl_file_path.setToolTip(self.m_sslfile)
 			self.txt_timeout.setText(str(self.m_timeout))
 			self.txt_message.setPlainText(self.m_message)
+			self.chk_ping.setChecked(self.m_autoping)
+			self.txt_ping_interval.setText(str(self.m_ping_interval))
+			self.txt_ping_timeout.setText(str(self.m_ping_timeout))
 		self.txt_endpoint.setEnabled(not self.ws_ready())
 		self.txt_timeout.setEnabled(not self.ws_ready())
 		self.chk_auto_use_ssl_chains.setEnabled(not self.ws_ready())
@@ -123,6 +128,8 @@ class Window(QMainWindow, WSClient):
 		self.txt_message.setEnabled(self.ws_ready())
 		self.btn_send_message.setEnabled(self.ws_ready())
 		self.btn_connect.setText("DISCONNECT" if self.ws_ready() else "CONNECT")
+		self.txt_ping_interval.setEnabled(self.m_autoping and not self.ws_ready())
+		self.txt_ping_timeout.setEnabled(self.m_autoping and not self.ws_ready())
 	
 	def selected_send_data_type(self):
 		return abs(self.buttonGroup_message.checkedId()) - 2
@@ -170,6 +177,10 @@ class Window(QMainWindow, WSClient):
 	def on_clicked_button_browse_ssl_file(self):
 		self.m_sslfile = Picker.select_file(self, self.is_default_style())
 		self.update_ui(True)
+
+	def on_clicked_auto_ping(self):
+		self.m_autoping = self.chk_ping.isChecked()
+		self.update_ui()
 
 	def on_clicked_button_send_message(self):
 		message = self.m_message

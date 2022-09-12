@@ -252,13 +252,21 @@ class WSClient:
 			on_pong=self.ws_on_pong,
 		)
 
+		ping_interval = 0
+		ping_timeout  = None
+		ping_payload  = ""
+		if self.m_autoping:
+			ping_interval = self.m_ping_interval
+			ping_timeout  = self.m_ping_timeout
+			ping_payload  = self.m_ping_message
+
 		def run(*args):
 			try:
 				ws.run_forever(
 					sslopt=ssl_opt,
-					# ping_interval=2,
-					# ping_timeout=10,
-					# ping_payload="this is ping message",
+					ping_interval=ping_interval,
+					ping_timeout=ping_timeout,
+					ping_payload=ping_payload,
 				)
 			except Exception as e:
 				ws.close()
