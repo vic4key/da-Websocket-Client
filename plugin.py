@@ -50,4 +50,6 @@ def initialize(ui):
       _plugins = loader.plugins
     except PluginImportError as e:
       print(e)
-    for e in plugins(): e.attach_ui(e, ui)
+    if not plugins() is None:
+      for e in plugins():
+        e.attach_ui(e, ui)
