@@ -4,6 +4,7 @@ if [ -d "bin" ]
 then
   echo "Creating package ..."
   cp -a preferences/. bin/preferences/
+  cp -a plugins/. bin/plugins/
   tar -czvf bin.tar.gz bin/
   echo "Finished"
 else
