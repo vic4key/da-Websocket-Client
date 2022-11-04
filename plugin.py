@@ -40,7 +40,7 @@ _plugins = None
 
 def plugins():
   global _plugins
-  return None if _plugins is None else _plugins.Plugin.values()
+  return [] if _plugins is None else _plugins.Plugin.values()
 
 def initialize(ui):
   global _plugins
@@ -50,6 +50,5 @@ def initialize(ui):
       _plugins = loader.plugins
     except PluginImportError as e:
       print(e)
-    if not plugins() is None:
-      for e in plugins():
-        e.attach_ui(e, ui)
+    for e in plugins():
+      e.attach_ui(e, ui)
