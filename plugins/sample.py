@@ -20,3 +20,6 @@ class Sample(PluginTemplate):
 
   def on_recv(self, ws, data, type, continuous):
     print("WS received =>", ws, "<data>", type, continuous)
+
+  def on_error(self, ws, error):
+    print("WS error    =>", ws, error)
