@@ -31,6 +31,18 @@ from main import Window
 # pip install qt_material
 # from qt_material import apply_stylesheet
 
+# hook I/O print to redirect output to debugviewer
+from win32api import OutputDebugString
+class LogWrapper:
+	def flush(self): pass
+	def write(self, s):
+		for line in s.replace('\t', '  ').split('\n'):
+			line = line.strip()
+			if len(line) > 0:
+				OutputDebugString(line)
+sys.stdout = LogWrapper()
+sys.stderr = LogWrapper()
+
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	win = Window(app)
