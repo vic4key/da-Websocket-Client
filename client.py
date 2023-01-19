@@ -1,6 +1,6 @@
 import os
-import jstyleson as json
 from enum import Enum
+import jstyleson as json
 
 import websocket, ssl
 from websocket import ABNF
