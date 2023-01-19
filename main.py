@@ -142,6 +142,9 @@ class Window(QMainWindow, WSClient):
 	def selected_send_data_type(self):
 		return abs(self.buttonGroup_message.checkedId()) - 2
 
+	def selected_log_type(self):
+		return abs(self.buttonGroup_log.checkedId()) - 2
+
 	def on_triggered_menu_help_about(self):
 		AboutDlg(self.app).exec_()
 

@@ -26,16 +26,20 @@ class icon_t(str, Enum):
 class color_t(str, Enum):
 	# status
 	success = "green"
-	normal = "black"
-	warn = "orange"
-	error = "red"
+	normal  = "black"
+	warn    = "orange"
+	error   = "red"
 	# color
-	red = "red"
-	orange = "orange"
+	red     = "red"
+	orange  = "orange"
 
 class data_t(int, Enum):
-	text = 0
+	text   = 0
 	binary = 1
+
+class log_t(int, Enum):
+	simple = 0
+	detail = 1
 
 class WSClient:
 	""" Websocket Client """
@@ -204,9 +208,9 @@ class WSClient:
 		if type == ABNF.OPCODE_TEXT:
 			self.log(data, color_t.red, icon_t.down)
 		elif type == ABNF.OPCODE_BINARY:
-			size = len(data)
-			if size > 16: # 16 columns
-				text_size = format_bytes(size);
+			log_type = self.selected_log_type()
+			if log_type == log_t.simple:
+				text_size = format_bytes(len(data));
 				self.log(f"<binary> {text_size}", color_t.red, icon_t.down)
 			else:
 				self.log(hex_view(data), color_t.red, icon_t.down)

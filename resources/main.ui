@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>757</height>
+    <height>759</height>
    </rect>
   </property>
   <property name="font">
@@ -397,11 +397,69 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_data_logging">
-          <property name="text">
-           <string>Data Logging</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_data_logging">
+            <property name="minimumSize">
+             <size>
+              <width>85</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Data Logging</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_simple_log">
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Simple</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_log</string>
+            </attribute>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_simple_detail">
+            <property name="text">
+             <string>Detail</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroup_log</string>
+            </attribute>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_log">
@@ -500,6 +558,25 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_message_types">
           <item>
+           <widget class="QLabel" name="label_5">
+            <property name="minimumSize">
+             <size>
+              <width>85</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Message</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QRadioButton" name="rb_message_text">
             <property name="maximumSize">
              <size>
@@ -533,6 +610,19 @@
              <string notr="true">buttonGroup_message</string>
             </attribute>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -707,7 +797,7 @@
      <x>0</x>
      <y>0</y>
      <width>700</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -759,5 +849,6 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_message"/>
+  <buttongroup name="buttonGroup_log"/>
  </buttongroups>
 </ui>

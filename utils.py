@@ -75,6 +75,7 @@ def format_bytes(number, unit = 1024): # PyVutils.Bytes.format_bytes(...)
     e = 0
     l = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
     if number > 0: e = int(math.log(number, unit))
-    if e < len(l): s = "%0.2f %s" % (number / unit**e, l[e])
+    if e < len(l):
+        s = ("%0.0f %s" if e == 0 else "%0.2f %s" ) % (number / unit**e, l[e])
     # else: s = "%0.2f 10^%d" % (float(number) / unit**e, e)
     return s
