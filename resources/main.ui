@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>759</height>
+    <height>765</height>
    </rect>
   </property>
   <property name="font">
@@ -425,6 +425,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display logging items in simple mode&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Simple</string>
             </property>
@@ -438,6 +441,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="rb_simple_detail">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display logging items in detail mode&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Detail</string>
             </property>
