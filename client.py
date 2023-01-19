@@ -185,12 +185,18 @@ class WSClient:
 		if error: raise error
 
 	def ws_on_ping(self, ws, message):
-		if isinstance(message, bytes): message = message.decode("utf-8")
+		try:
+			if isinstance(message, bytes): message = message.decode("utf-8")
+		except UnicodeDecodeError:
+			message = hex_view(message)
 		self.log(message, color_t.red, icon_t.up)
 		for e in plugin.plugins(): e.on_ping(e, ws, message)
 
 	def ws_on_pong(self, ws, message):
-		if isinstance(message, bytes): message = message.decode("utf-8")
+		try:
+			if isinstance(message, bytes): message = message.decode("utf-8")
+		except UnicodeDecodeError:
+			message = hex_view(message)
 		self.log(message, color_t.red, icon_t.down)
 		for e in plugin.plugins(): e.on_pong(e, ws, message)
 
