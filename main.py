@@ -67,7 +67,6 @@ class Window(QMainWindow, WSClient):
 	def showEvent(self, a0) -> None:
 		super(Window, self).showEvent(a0)
 		for e in plugin.plugins():
-			print(e)
 			self.menuPlugins.addAction(e.name)
 
 	def is_default_style(self):
