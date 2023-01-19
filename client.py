@@ -204,7 +204,12 @@ class WSClient:
 		if type == ABNF.OPCODE_TEXT:
 			self.log(data, color_t.red, icon_t.down)
 		elif type == ABNF.OPCODE_BINARY:
-			self.log(hex_view(data), color_t.red, icon_t.down)
+			size = len(data)
+			if size > 16: # 16 columns
+				text_size = format_bytes(size);
+				self.log(f"<binary> {text_size}", color_t.red, icon_t.down)
+			else:
+				self.log(hex_view(data), color_t.red, icon_t.down)
 		else:
 			print("received data type did not support", ABNF.OPCODE_MAP.get(type))
 		for e in plugin.plugins(): e.on_recv(e, ws, data, type, continuous)

@@ -1,4 +1,4 @@
-import os, sys, platform, socket, requests
+import os, sys, platform, socket, requests, math
 from OpenSSL import SSL, crypto
 from hexdump import hexdump
 from datetime import datetime
@@ -70,3 +70,11 @@ def get_default_ca_trust_root_certificates():
 				f.write(response.text)
 	except Exception as e: print(e)
 	return cacert_path
+
+def format_bytes(number, unit = 1024): # PyVutils.Bytes.format_bytes(...)
+    e = 0
+    l = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
+    if number > 0: e = int(math.log(number, unit))
+    if e < len(l): s = "%0.2f %s" % (number / unit**e, l[e])
+    # else: s = "%0.2f 10^%d" % (float(number) / unit**e, e)
+    return s
