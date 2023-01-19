@@ -72,7 +72,7 @@ class Window(QMainWindow, WSClient):
 		event.accept()
 
 	def debug(self, text):
-		self.m_signal_debug.emit(text)
+		if self.m_debug: self.m_signal_debug.emit(text)
 
 	@Slot(str)
 	def slot_debug(self, text):
