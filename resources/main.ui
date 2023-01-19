@@ -819,7 +819,13 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuPlugins">
+    <property name="title">
+     <string>Plugins</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuPlugins"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionExit">
@@ -854,7 +860,7 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_message"/>
   <buttongroup name="buttonGroup_log"/>
+  <buttongroup name="buttonGroup_message"/>
  </buttongroups>
 </ui>

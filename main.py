@@ -64,6 +64,12 @@ class Window(QMainWindow, WSClient):
 		# others
 		self.txt_endpoint.setCursorPosition(0)
 
+	def showEvent(self, a0) -> None:
+		super(Window, self).showEvent(a0)
+		for e in plugin.plugins():
+			print(e)
+			self.menuPlugins.addAction(e.name)
+
 	def is_default_style(self):
 		return QApplication.instance().style().metaObject().className() == "QWindowsVistaStyle"
 
